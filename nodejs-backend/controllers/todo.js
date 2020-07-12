@@ -21,14 +21,16 @@ router.get('/testing', async(req, res) =>{
       try {
         let userEntry = {};
 
-        userEntry.title = req.query.title;
-        userEntry.note = req.query.note
+        userEntry.title = req.body.title;
+        userEntry.note = req.body.note
 
         let createTodo = Todo.create(userEntry)
 
-        res.json({
-            status: 200,
-            data: createTodo
+        createTodo.then((result) =>{
+            res.json({
+                status: 200,
+                data: result
+            })
         })
       } catch (error) {
           res.json({
@@ -50,6 +52,31 @@ router.get('/allTodos', async(req, res) =>{
         res.json({
             status: 401,
             data: error
+        })
+    }
+})
+
+router.delete('/deleteTodo/:id', async(req, res) =>{
+    try {
+        const todoId = req.params.id
+
+        const deltTodo = await Todo.findByIdAndDelete(todoId);
+
+        console.log(deltTodo, '<--- deltTodo')
+        deltTodo.then((result) =>{
+            console.log(result, '<--- result')
+
+            res.json({
+                status: 200,
+                data: 'todo is deleted'
+            })
+        })
+        
+
+    } catch (error) {
+        res.json({
+            status: 401,
+            data: 'cant delete todo'
         })
     }
 })

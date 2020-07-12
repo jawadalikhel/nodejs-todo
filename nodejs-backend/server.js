@@ -2,12 +2,19 @@ const express = require('express');
 const app = express();
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 require('./db/db.js');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionsSuccessStatus: 200
+  }
+  app.use(cors(corsOptions));
 
 app.use(session({
     secret: 'nugget007',
